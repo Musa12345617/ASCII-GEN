@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Generator</title>
+
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
         body {
             background-color: #0f172a;
             color: #f8fafc;
@@ -20,181 +22,681 @@
             padding: 40px 20px;
             min-height: 100vh;
         }
+
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1120px;
             display: flex;
             flex-direction: column;
             gap: 20px;
             align-items: center;
         }
+
         h1 {
             font-size: 2.2rem;
             text-transform: uppercase;
             font-weight: 800;
             text-align: center;
-            background: linear-gradient(270deg, #ff595e, #ffca3a, #8ac926, #1982c4, #6a4c93, #ff595e);
+
+            background: linear-gradient(
+                270deg,
+                #ff595e,
+                #ffca3a,
+                #8ac926,
+                #1982c4,
+                #6a4c93,
+                #ff595e
+            );
+
             background-size: 400% 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+
             animation: rainbowAnimation 6s ease infinite;
         }
+
         input {
             width: 100%;
             padding: 14px 18px;
+
             background-color: #1e293b;
             border: 2px solid #334155;
             border-radius: 8px;
+
             color: #fff;
             font-size: 1.2rem;
+
             outline: none;
             text-transform: uppercase;
         }
+
         input:focus {
             border-color: #38bdf8;
         }
+
         .output-box {
             width: 100%;
+
             background-color: #1e293b;
             border: 2px solid #334155;
             border-radius: 8px;
+
             overflow: hidden;
+
             display: flex;
             flex-direction: column;
         }
+
         .output-header {
             display: flex;
             justify-content: flex-end;
+
             padding: 8px 12px;
+
             background-color: #0f172a;
             border-bottom: 1px solid #334155;
         }
+
         .copy-btn {
             background-color: #38bdf8;
             color: #0f172a;
+
             border: none;
-            padding: 6px 16px;
+            padding: 8px 18px;
+
             font-weight: 700;
             font-size: 0.85rem;
+
             border-radius: 4px;
             cursor: pointer;
-            transition: opacity 0.2s;
+
+            transition: opacity 0.2s, transform 0.1s;
         }
+
         .copy-btn:hover {
             opacity: 0.85;
         }
+
+        .copy-btn:active {
+            transform: scale(0.97);
+        }
+
+        
         pre {
-            padding: 20px;
+            padding: 24px;
+
             overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            line-height: 1.2;
+            overflow-y: hidden;
+
+            font-family:
+                "Cascadia Mono",
+                "DejaVu Sans Mono",
+                "Noto Sans Mono",
+                "Consolas",
+                "Courier New",
+                monospace;
+
+            font-size: 18px;
+            font-weight: 400;
+
+            line-height: 1.05;
+            letter-spacing: 0;
+
             white-space: pre;
+
             margin: 0;
-            min-height: 150px;
+            min-height: 170px;
+
             color: #38bdf8;
+
+            font-variant-ligatures: none;
+            font-feature-settings: "liga" 0, "calt" 0;
+
+            tab-size: 4;
         }
 
         @keyframes rainbowAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+       
+        @media (max-width: 600px) {
+            body {
+                padding: 25px 12px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            pre {
+                padding: 18px;
+                font-size: 14px;
+            }
+
+            input {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div class="container">
+
         <h1>ASCII Generator</h1>
-        <input type="text" id="userInput" placeholder="Type text..." value="WELCOME">
-        
+
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Type text..."
+            value="WELCOME"
+            autocomplete="off"
+            spellcheck="false"
+        >
+
         <div class="output-box">
+
             <div class="output-header">
-                <button class="copy-btn" id="copyBtn">Copy ASCII</button>
+                <button class="copy-btn" id="copyBtn">
+                    Copy ASCII
+                </button>
             </div>
+
             <pre id="output"></pre>
+
         </div>
+
     </div>
 
+
     <script>
+
         const asciiMap = {
-            'A': ["█████╗ ", "██╔══██╗", "███████║", "██╔══██║", "██║  ██║", "╚═╝  ╚═╝"],
-            'B': ["██████╗ ", "██╔══██╗", "██████╔╝", "██╔══██╗", "██████╔╝", "╚═════╝ "],
-            'C': ["██████╗ ", "██╔════╝", "██║     ", "██║     ", "╚██████╗", " ╚═════╝"],
-            'D': ["██████╗ ", "██╔══██╗", "██║  ██║", "██║  ██║", "██████╔╝", "╚═════╝ "],
-            'E': ["███████╗", "██╔════╝", "█████╗  ", "██╔══╝  ", "███████╗", "╚══════╝"],
-            'F': ["███████╗", "██╔════╝", "█████╗  ", "██╔══╝  ", "██║     ", "╚═╝     "],
-            'G': ["██████╗ ", "██╔════╝", "██║  ███╗", "██║   ██║", "╚██████╔╝", " ╚═════╝ "],
-            'H': ["██╗  ██╗", "██║  ██║", "███████║", "██╔══██║", "██║  ██║", "╚═╝  ╚═╝"],
-            'I': ["██╗", "██║", "██║", "██║", "██║", "╚═╝"],
-            'J': ["     ██╗", "     ██║", "     ██║", "██   ██║", "╚█████╔╝", " ╚════╝ "],
-            'K': ["██╗  ██╗", "██║ ██╔╝", "█████╔╝ ", "██╔═██╗ ", "██║  ██╗", "╚═╝  ╚═╝"],
-            'L': ["██╗     ", "██║     ", "██║     ", "██║     ", "███████╗", "╚══════╝"],
-            'M': ["███╗   ███╗", "████╗ ████║", "██╔████╔██║", "██║╚██╔╝██║", "██║ ╚═╝ ██║", "╚═╝     ╚═╝"],
-            'N': ["███╗   ██╗", "████╗  ██║", "██╔██╗ ██║", "██║╚██╗██║", "██║ ╚████║", "╚═╝  ╚═══╝"],
-            'O': ["██████╗ ", "██╔══██╗", "██║  ██║", "██║  ██║", "╚██████╔╝", " ╚═════╝ "],
-            'P': ["██████╗ ", "██╔══██╗", "██████╔╝", "██╔═══╝ ", "██║     ", "╚═╝     "],
-            'Q': ["██████╗ ", "██╔══██╗", "██║  ██║", "██║  ██║", "╚██████╗", " ╚████║", "   ╚═══╝"],
-            'R': ["██████╗ ", "██╔══██╗", "██████╔╝", "██╔══██╗", "██║  ██║", "╚═╝  ╚═╝"],
-            'S': ["██████╗ ", "██╔════╝", "███████║", "╚════██║", "███████║", "╚══════╝"],
-            'T': ["████████╗", "╚══██╔══╝", "   ██║   ", "   ██║   ", "   ██║   ", "   ╚═╝   "],
-            'U': ["██╗  ██╗", "██║  ██║", "██║  ██║", "██║  ██║", "╚██████╔╝", " ╚═════╝ "],
-            'V': ["██╗  ██╗", "██║  ██║", "██║  ██║", "╚██╗██╔╝", " ╚████╔╝ ", "  ╚═══╝  "],
-            'W': ["██╗  ██╗  ██╗", "██║  ██║  ██║", "██║  ██║  ██║", "██║  ███╗ ██║", "╚█████╔████╔╝", " ╚════╝╚═╝   "],
-            'X': ["██╗  ██╗", "╚██╗██╔╝", " ╚███╔╝ ", " ██╔██╗ ", "██╔╝ ██╗", "╚═╝  ╚═╝"],
-            'Y': ["██╗   ██╗", "╚██╗ ██╔╝", " ╚████╔╝ ", "  ╚██╔╝  ", "   ██║   ", "   ╚═╝   "],
-            'Z': ["███████╗", "╚════██║", "    ██╔╝", "   ██╔╝ ", "  ███████╗", "  ╚══════╝"],
-            '0': ["██████╗ ", "██╔══██╗", "██║  ██║", "██║  ██║", "╚██████╔╝", " ╚═════╝ "],
-            '1': ["██╗", "███║", "╚██║", " ██║", " ██║", " ╚═╝"],
-            '2': ["██████╗ ", "╚════██╗", " █████╔╝", "██╔═══╝ ", "███████╗", "╚══════╝"],
-            '3': ["██████╗ ", "╚════██╗", " █████╔╝", "╚════██╗", "██████╔╝", "╚═════╝ "],
-            '4': ["██╗  ██╗", "██║  ██║", "███████║", "╚════██║", "     ██║", "     ╚═╝"],
-            '5': ["███████╗", "██╔════╝", "███████╗", "╚════██║", "███████║", "╚══════╝"],
-            '6': ["██████╗ ", "██╔════╝", "███████╗", "██╔══██║", "╚██████╔╝", " ╚═════╝ "],
-            '7': ["███████╗", "╚════██╔╝", "   ██╔╝ ", "  ██╔╝  ", "  ██║   ", "  ╚═╝   "],
-            '8': ["██████╗ ", "██╔══██║", "╚██████╔╝", "██╔══██║", "╚██████╔╝", " ╚═════╝ "],
-            '9': ["██████╗ ", "██╔══██║", "╚███████║", "    ██╔╝", "   ██╔╝ ", "   ╚═╝  "],
-            ' ': ["    ", "    ", "    ", "    ", "    ", "    "],
-            '!': [" ██╗", " ██║", " ██║", " ╚═╝", " ██╗", " ╚═╝"]
+
+            A: [
+                " ████╗ ",
+                "██╔══██╗",
+                "███████║",
+                "██╔══██║",
+                "██║  ██║",
+                "╚═╝  ╚═╝"
+            ],
+
+            B: [
+                "██████╗ ",
+                "██╔══██╗",
+                "██████╔╝",
+                "██╔══██╗",
+                "██████╔╝",
+                "╚═════╝ "
+            ],
+
+            C: [
+                "██████╗ ",
+                "██╔════╝",
+                "██║     ",
+                "██║     ",
+                "╚██████╗",
+                " ╚═════╝"
+            ],
+
+            D: [
+                "██████╗ ",
+                "██╔══██╗",
+                "██║  ██║",
+                "██║  ██║",
+                "██████╔╝",
+                "╚═════╝ "
+            ],
+
+            E: [
+                "███████╗",
+                "██╔════╝",
+                "█████╗  ",
+                "██╔══╝  ",
+                "███████╗",
+                "╚══════╝"
+            ],
+
+            F: [
+                "███████╗",
+                "██╔════╝",
+                "█████╗  ",
+                "██╔══╝  ",
+                "██║     ",
+                "╚═╝     "
+            ],
+
+            G: [
+                "██████╗ ",
+                "██╔════╝",
+                "██║  ███╗",
+                "██║   ██║",
+                "╚██████╔╝",
+                " ╚═════╝ "
+            ],
+
+            H: [
+                "██╗  ██╗",
+                "██║  ██║",
+                "███████║",
+                "██╔══██║",
+                "██║  ██║",
+                "╚═╝  ╚═╝"
+            ],
+
+            I: [
+                "██╗",
+                "██║",
+                "██║",
+                "██║",
+                "██║",
+                "╚═╝"
+            ],
+
+            J: [
+                "     ██╗",
+                "     ██║",
+                "     ██║",
+                "██   ██║",
+                "╚█████╔╝",
+                " ╚════╝ "
+            ],
+
+            K: [
+                "██╗  ██╗",
+                "██║ ██╔╝",
+                "█████╔╝ ",
+                "██╔═██╗ ",
+                "██║  ██╗",
+                "╚═╝  ╚═╝"
+            ],
+
+            L: [
+                "██╗     ",
+                "██║     ",
+                "██║     ",
+                "██║     ",
+                "███████╗",
+                "╚══════╝"
+            ],
+
+            M: [
+                "███╗   ███╗",
+                "████╗ ████║",
+                "██╔████╔██║",
+                "██║╚██╔╝██║",
+                "██║ ╚═╝ ██║",
+                "╚═╝     ╚═╝"
+            ],
+
+            N: [
+                "███╗   ██╗",
+                "████╗  ██║",
+                "██╔██╗ ██║",
+                "██║╚██╗██║",
+                "██║ ╚████║",
+                "╚═╝  ╚═══╝"
+            ],
+
+            O: [
+                "██████╗ ",
+                "██╔══██╗",
+                "██║  ██║",
+                "██║  ██║",
+                "╚██████╔╝",
+                " ╚═════╝ "
+            ],
+
+            P: [
+                "██████╗ ",
+                "██╔══██╗",
+                "██████╔╝",
+                "██╔═══╝ ",
+                "██║     ",
+                "╚═╝     "
+            ],
+
+            Q: [
+                "██████╗ ",
+                "██╔══██╗",
+                "██║  ██║",
+                "██║  ██║",
+                "╚██████╗",
+                " ╚████║ ",
+                "   ╚═══╝"
+            ],
+
+            R: [
+                "██████╗ ",
+                "██╔══██╗",
+                "██████╔╝",
+                "██╔══██╗",
+                "██║  ██║",
+                "╚═╝  ╚═╝"
+            ],
+
+            S: [
+                "██████╗ ",
+                "██╔════╝",
+                "███████║",
+                "╚════██║",
+                "███████║",
+                "╚══════╝"
+            ],
+
+            T: [
+                "████████╗",
+                "╚══██╔══╝",
+                "   ██║   ",
+                "   ██║   ",
+                "   ██║   ",
+                "   ╚═╝   "
+            ],
+
+            U: [
+                "██╗  ██╗",
+                "██║  ██║",
+                "██║  ██║",
+                "██║  ██║",
+                "╚██████╔╝",
+                " ╚═════╝ "
+            ],
+
+            V: [
+                "██╗  ██╗",
+                "██║  ██║",
+                "██║  ██║",
+                "╚██╗██╔╝",
+                " ╚████╔╝ ",
+                "  ╚═══╝  "
+            ],
+
+            W: [
+                "██╗  ██╗  ██╗",
+                "██║  ██║  ██║",
+                "██║  ██║  ██║",
+                "██║  ███╗ ██║",
+                "╚█████╔████╔╝",
+                " ╚════╝╚═╝   "
+            ],
+
+            X: [
+                "██╗  ██╗",
+                "╚██╗██╔╝",
+                " ╚███╔╝ ",
+                " ██╔██╗ ",
+                "██╔╝ ██╗",
+                "╚═╝  ╚═╝"
+            ],
+
+            Y: [
+                "██╗   ██╗",
+                "╚██╗ ██╔╝",
+                " ╚████╔╝ ",
+                "  ╚██╔╝  ",
+                "   ██║   ",
+                "   ╚═╝   "
+            ],
+
+            Z: [
+                "███████╗",
+                "╚════██║",
+                "    ██╔╝",
+                "   ██╔╝ ",
+                "  ███████╗",
+                "  ╚══════╝"
+            ],
+
+            0: [
+                "██████╗ ",
+                "██╔══██╗",
+                "██║  ██║",
+                "██║  ██║",
+                "╚██████╔╝",
+                " ╚═════╝ "
+            ],
+
+            1: [
+                "██╗",
+                "███║",
+                "╚██║",
+                " ██║",
+                " ██║",
+                " ╚═╝"
+            ],
+
+            2: [
+                "██████╗ ",
+                "╚════██╗",
+                " █████╔╝",
+                "██╔═══╝ ",
+                "███████╗",
+                "╚══════╝"
+            ],
+
+            3: [
+                "██████╗ ",
+                "╚════██╗",
+                " █████╔╝",
+                "╚════██╗",
+                "██████╔╝",
+                "╚═════╝ "
+            ],
+
+            4: [
+                "██╗  ██╗",
+                "██║  ██║",
+                "███████║",
+                "╚════██║",
+                "     ██║",
+                "     ╚═╝"
+            ],
+
+            5: [
+                "███████╗",
+                "██╔════╝",
+                "███████╗",
+                "╚════██║",
+                "███████║",
+                "╚══════╝"
+            ],
+
+            6: [
+                "██████╗ ",
+                "██╔════╝",
+                "███████╗",
+                "██╔══██║",
+                "╚██████╔╝",
+                " ╚═════╝ "
+            ],
+
+            7: [
+                "███████╗",
+                "╚════██╔╝",
+                "   ██╔╝ ",
+                "  ██╔╝  ",
+                "  ██║   ",
+                "  ╚═╝   "
+            ],
+
+            8: [
+                "██████╗ ",
+                "██╔══██║",
+                "╚██████╔╝",
+                "██╔══██║",
+                "╚██████╔╝",
+                " ╚═════╝ "
+            ],
+
+            9: [
+                "██████╗ ",
+                "██╔══██║",
+                "╚███████║",
+                "    ██╔╝",
+                "   ██╔╝ ",
+                "   ╚═╝  "
+            ],
+
+            " ": [
+                "        ",
+                "        ",
+                "        ",
+                "        ",
+                "        ",
+                "        "
+            ],
+
+            "!": [
+                " ██╗",
+                " ██║",
+                " ██║",
+                " ╚═╝",
+                " ██╗",
+                " ╚═╝"
+            ]
         };
 
-        const userInput = document.getElementById('userInput');
-        const output = document.getElementById('output');
-        const copyBtn = document.getElementById('copyBtn');
+
+        const userInput = document.getElementById("userInput");
+        const output = document.getElementById("output");
+        const copyBtn = document.getElementById("copyBtn");
+
+
+        function padRight(str, length) {
+            return str.padEnd(length, " ");
+        }
+
 
         function renderASCII() {
+
             const text = userInput.value.toUpperCase();
+
             if (!text) {
                 output.textContent = "";
                 return;
             }
 
-            let lines = ["", "", "", "", "", ""];
+            
+            const characters = [...text].map(char => {
+                return asciiMap[char] || asciiMap[" "];
+            });
 
-            for (let i = 0; i < text.length; i++) {
-                let char = text[i];
-                let charData = asciiMap[char] || asciiMap[' '];
-                for (let row = 0; row < 6; row++) {
-                    lines[row] += (charData[row] || "    ") + "    ";
-                }
+
+          
+            const rowCount = Math.max(
+                ...characters.map(char => char.length)
+            );
+
+
+           
+            const widths = characters.map(char => {
+
+                return Math.max(
+                    ...char.map(line => [...line].length)
+                );
+
+            });
+
+
+            const lines = [];
+
+
+            for (let row = 0; row < rowCount; row++) {
+
+                let line = "";
+
+
+                characters.forEach((char, index) => {
+
+                    const currentLine = char[row] || "";
+
+                    
+                    line += padRight(
+                        currentLine,
+                        widths[index]
+                    );
+
+
+                    
+                    line += "   ";
+
+                });
+
+
+                lines.push(line.trimEnd());
             }
 
-            output.textContent = lines.join('\n');
+
+            output.textContent = lines.join("\n");
         }
 
-        userInput.addEventListener('input', renderASCII);
+
+        
+        userInput.addEventListener("input", renderASCII);
+
+
+        
         renderASCII();
 
-        copyBtn.addEventListener('click', () => {
+
+       
+        copyBtn.addEventListener("click", async () => {
+
             const textToCopy = output.textContent;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalText = copyBtn.textContent;
-                copyBtn.textContent = 'Copied!';
-                setTimeout(() => {
-                    copyBtn.textContent = originalText;
-                }, 1500);
-            });
+
+            if (!textToCopy) {
+                return;
+            }
+
+
+            try {
+
+                await navigator.clipboard.writeText(textToCopy);
+
+            } catch (error) {
+
+                
+                const textarea = document.createElement("textarea");
+
+                textarea.value = textToCopy;
+
+                textarea.style.position = "fixed";
+                textarea.style.opacity = "0";
+
+                document.body.appendChild(textarea);
+
+                textarea.select();
+
+                document.execCommand("copy");
+
+                textarea.remove();
+            }
+
+
+            const originalText = copyBtn.textContent;
+
+            copyBtn.textContent = "Copied!";
+
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+            }, 1500);
+
         });
+
     </script>
+
 </body>
 </html>
