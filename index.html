@@ -1,8 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>ASCII Generator</title>
 
     <style>
@@ -23,6 +25,36 @@
             min-height: 100vh;
         }
 
+        .guns-link {
+            position: fixed;
+            top: 20px;
+            left: 25px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(
+                270deg,
+                #ff595e,
+                #ffca3a,
+                #8ac926,
+                #1982c4,
+                #6a4c93,
+                #ff595e
+            );
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation:
+                rainbowAnimation 2s linear infinite,
+                glowAnimation 1.5s ease-in-out infinite alternate;
+            transition: transform 0.2s;
+            z-index: 1000;
+        }
+
+        .guns-link:hover {
+            transform: scale(1.05);
+        }
+
         .container {
             width: 100%;
             max-width: 1120px;
@@ -37,7 +69,6 @@
             text-transform: uppercase;
             font-weight: 800;
             text-align: center;
-
             background: linear-gradient(
                 270deg,
                 #ff595e,
@@ -47,25 +78,22 @@
                 #6a4c93,
                 #ff595e
             );
-
             background-size: 400% 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-
-            animation: rainbowAnimation 6s ease infinite;
+            animation:
+                rainbowAnimation 1.8s linear infinite,
+                glowAnimation 1.2s ease-in-out infinite alternate;
         }
 
         input {
             width: 100%;
             padding: 14px 18px;
-
             background-color: #1e293b;
             border: 2px solid #334155;
             border-radius: 8px;
-
             color: #fff;
             font-size: 1.2rem;
-
             outline: none;
             text-transform: uppercase;
         }
@@ -76,13 +104,10 @@
 
         .output-box {
             width: 100%;
-
             background-color: #1e293b;
             border: 2px solid #334155;
             border-radius: 8px;
-
             overflow: hidden;
-
             display: flex;
             flex-direction: column;
         }
@@ -90,9 +115,7 @@
         .output-header {
             display: flex;
             justify-content: flex-end;
-
             padding: 8px 12px;
-
             background-color: #0f172a;
             border-bottom: 1px solid #334155;
         }
@@ -100,16 +123,12 @@
         .copy-btn {
             background-color: #38bdf8;
             color: #0f172a;
-
             border: none;
             padding: 8px 18px;
-
             font-weight: 700;
             font-size: 0.85rem;
-
             border-radius: 4px;
             cursor: pointer;
-
             transition: opacity 0.2s, transform 0.1s;
         }
 
@@ -121,13 +140,10 @@
             transform: scale(0.97);
         }
 
-        
         pre {
             padding: 24px;
-
             overflow-x: auto;
             overflow-y: hidden;
-
             font-family:
                 "Cascadia Mono",
                 "DejaVu Sans Mono",
@@ -135,23 +151,16 @@
                 "Consolas",
                 "Courier New",
                 monospace;
-
             font-size: 18px;
             font-weight: 400;
-
             line-height: 1.05;
             letter-spacing: 0;
-
             white-space: pre;
-
             margin: 0;
             min-height: 170px;
-
             color: #38bdf8;
-
             font-variant-ligatures: none;
             font-feature-settings: "liga" 0, "calt" 0;
-
             tab-size: 4;
         }
 
@@ -160,8 +169,16 @@
                 background-position: 0% 50%;
             }
 
+            25% {
+                background-position: 50% 50%;
+            }
+
             50% {
                 background-position: 100% 50%;
+            }
+
+            75% {
+                background-position: 50% 50%;
             }
 
             100% {
@@ -169,10 +186,25 @@
             }
         }
 
-       
+        @keyframes glowAnimation {
+            from {
+                filter: drop-shadow(0 0 2px currentColor);
+            }
+
+            to {
+                filter: drop-shadow(0 0 10px currentColor);
+            }
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 25px 12px;
+            }
+
+            .guns-link {
+                top: 15px;
+                left: 15px;
+                font-size: 1rem;
             }
 
             h1 {
@@ -192,6 +224,15 @@
 </head>
 
 <body>
+
+    <a
+        class="guns-link"
+        href="https://guns.lol/everybodyhateme"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        Guns.lol
+    </a>
 
     <div class="container">
 
@@ -219,7 +260,6 @@
         </div>
 
     </div>
-
 
     <script>
 
@@ -569,19 +609,15 @@
             ]
         };
 
-
         const userInput = document.getElementById("userInput");
         const output = document.getElementById("output");
         const copyBtn = document.getElementById("copyBtn");
-
 
         function padRight(str, length) {
             return str.padEnd(length, " ");
         }
 
-
         function renderASCII() {
-
             const text = userInput.value.toUpperCase();
 
             if (!text) {
@@ -589,102 +625,69 @@
                 return;
             }
 
-            
             const characters = [...text].map(char => {
                 return asciiMap[char] || asciiMap[" "];
             });
 
-
-          
             const rowCount = Math.max(
                 ...characters.map(char => char.length)
             );
 
-
-           
             const widths = characters.map(char => {
-
                 return Math.max(
                     ...char.map(line => [...line].length)
                 );
-
             });
-
 
             const lines = [];
 
-
             for (let row = 0; row < rowCount; row++) {
-
                 let line = "";
 
-
                 characters.forEach((char, index) => {
-
                     const currentLine = char[row] || "";
 
-                    
                     line += padRight(
                         currentLine,
                         widths[index]
                     );
 
-
-                    
                     line += "   ";
-
                 });
-
 
                 lines.push(line.trimEnd());
             }
 
-
             output.textContent = lines.join("\n");
         }
 
-
-        
         userInput.addEventListener("input", renderASCII);
 
-
-        
         renderASCII();
 
-
-       
         copyBtn.addEventListener("click", async () => {
-
             const textToCopy = output.textContent;
 
             if (!textToCopy) {
                 return;
             }
 
-
             try {
-
                 await navigator.clipboard.writeText(textToCopy);
-
             } catch (error) {
-
-                
                 const textarea = document.createElement("textarea");
 
                 textarea.value = textToCopy;
-
                 textarea.style.position = "fixed";
                 textarea.style.opacity = "0";
 
                 document.body.appendChild(textarea);
 
                 textarea.select();
-
                 document.execCommand("copy");
 
                 textarea.remove();
             }
-
 
             const originalText = copyBtn.textContent;
 
@@ -693,10 +696,10 @@
             setTimeout(() => {
                 copyBtn.textContent = originalText;
             }, 1500);
-
         });
 
     </script>
 
 </body>
 </html>
+```
